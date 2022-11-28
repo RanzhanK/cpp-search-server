@@ -91,8 +91,9 @@ public:
     template <typename StringContainer>
     explicit SearchServer(const StringContainer& stop_words)
         : stop_words_(MakeUniqueNonEmptyStrings(stop_words)) {
-            for (const string& word : SetStopWords(stop_words)) {
-                if (!IsValidWord(word)) {throw invalid_argument("invalid document: unacceptable symbols"s);}
+            auto word = SetStopWords(stop_words);
+            if (!all_of(word.begin(), word.end(), IsValidWord)) {
+                throw invalid_argument("invalid document: unacceptable symbols"s);
             }
         }
 
@@ -100,9 +101,6 @@ public:
         : SearchServer(
             SplitIntoWords(stop_words_text))  // Invoke delegating constructor from string container
     {
-            if (!IsValidWord(stop_words_text)) {
-                 throw invalid_argument("invalid document: unacceptable symbols"s);
-             }
     }
     
     void AddDocument(int document_id, const string& document, DocumentStatus status, const vector<int>& ratings) {
@@ -126,29 +124,14 @@ public:
 
     template <typename DocumentPredicate>
     vector<Document> FindTopDocuments(const string& raw_query, DocumentPredicate document_predicate) const {
-        if(!IsValidWord(raw_query)) {
-             throw invalid_argument("invalid document: unacceptable symbols"s);
-        }
         const Query query = ParseQuery(raw_query);
-        for (const string& word : query.minus_words) {
-            if (word[0] == '-'){
-                throw invalid_argument("invalid document: no words"s);
-            }
-            if (word == "-" || !IsValidWord(word)){
-                throw invalid_argument("invalid document: several characters '-' in a row"s);
-            }
-            if (word.size() == 0){
-                throw invalid_argument("invalid document: word must not be empty"s);
-            }
-        }
         auto matched_documents = FindAllDocuments(query, document_predicate);
         sort(matched_documents.begin(), matched_documents.end(),
              [](const Document& lhs, const Document& rhs) {
                  if (abs(lhs.relevance - rhs.relevance) < 1e-6) {
                      return lhs.rating > rhs.rating;
-                 } else {
-                     return lhs.relevance > rhs.relevance;
                  }
+                 return lhs.relevance > rhs.relevance;
              });
         if (matched_documents.size() > MAX_RESULT_DOCUMENT_COUNT) {
             matched_documents.resize(MAX_RESULT_DOCUMENT_COUNT);
@@ -280,6 +263,9 @@ private:
 
     Query ParseQuery(const string& text) const {
         Query query;
+        if(!IsValidWord(text)) {
+            throw invalid_argument("invalid document: unacceptable symbols"s);
+        }
         for (const string& word : SplitIntoWords(text)) {
             const QueryWord query_word = ParseQueryWord(word);
             if (!query_word.is_stop) {
@@ -289,6 +275,17 @@ private:
                     query.plus_words.insert(query_word.data);
                 }
             }
+        }
+        for (const string& word : query.minus_words) { 
+            if (word[0] == '-'){ 
+                throw invalid_argument("invalid document: no words"s); 
+            } 
+            if (word == "-" || !IsValidWord(word)){ 
+                throw invalid_argument("invalid document: several characters '-' in a row"s); 
+            } 
+            if (word.size() == 0){ 
+                throw invalid_argument("invalid document: word must not be empty"s); 
+            } 
         }
         return query;
     }
