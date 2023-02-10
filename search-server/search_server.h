@@ -17,6 +17,7 @@
 
 
 const int MAX_RESULT_DOCUMENT_COUNT = 5;
+constexpr double relevance_num = 1e-6;
 
 class SearchServer {
 public:
@@ -41,7 +42,7 @@ public:
         auto matched_documents = FindAllDocuments(query, document_predicate);
         sort(matched_documents.begin(), matched_documents.end(),
              [](const Document& lhs, const Document& rhs) {
-                 if (std::abs(lhs.relevance - rhs.relevance) < 1e-6) {
+                 if (std::abs(lhs.relevance - rhs.relevance) < relevance_num) {
                      return lhs.rating > rhs.rating;
                  }
                  return lhs.relevance > rhs.relevance;
