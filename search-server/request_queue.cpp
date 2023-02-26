@@ -2,25 +2,29 @@
 
 using namespace std;
 
-template <typename DocumentPredicate>
-vector<Document> RequestQueue::AddFindRequest(const string& raw_query, DocumentPredicate document_predicate) {
+//метод добавления запроса с лямбдой, для сохранения статистики
+template<typename DocumentPredicate>
+vector<Document> RequestQueue::AddFindRequest(const string &raw_query, DocumentPredicate document_predicate) {
     const auto result = search_server_.FindTopDocuments(raw_query, document_predicate);
     AddRequest(result.size());
     return result;
 }
 
-vector<Document> RequestQueue::AddFindRequest(const string& raw_query, DocumentStatus status) {
+//метод добавления запроса с заданным статусом, для сохранения статистики
+vector<Document> RequestQueue::AddFindRequest(const string &raw_query, DocumentStatus status) {
     const auto result = search_server_.FindTopDocuments(raw_query, status);
     AddRequest(result.size());
     return result;
 }
 
-vector<Document> RequestQueue::AddFindRequest(const string& raw_query) {
+//метод добавления запроса с актуальным статусом, для сохранения статистики
+vector<Document> RequestQueue::AddFindRequest(const string &raw_query) {
     const auto result = search_server_.FindTopDocuments(raw_query);
     AddRequest(result.size());
     return result;
 }
 
+//метод для определения сколько за последние сутки было запросов, на которые ничего не нашлось
 int RequestQueue::GetNoResultRequests() const {
     return no_results_requests_;
 }

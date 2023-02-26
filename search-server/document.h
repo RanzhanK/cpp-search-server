@@ -1,9 +1,9 @@
 #pragma once
 
-#include <iostream>
 #include <ostream>
-#include "paginator.h"
+#include <iostream>
 
+//статусы документов
 enum class DocumentStatus {
     ACTUAL,
     IRRELEVANT,
@@ -11,13 +11,12 @@ enum class DocumentStatus {
     REMOVED,
 };
 
+//структура документов
 struct Document {
     Document() = default;
 
     Document(int id, double relevance, int rating)
-            : id(id)
-            , relevance(relevance)
-            , rating(rating) {
+            : id(id), relevance(relevance), rating(rating) {
     }
 
     int id = 0;
@@ -25,4 +24,5 @@ struct Document {
     int rating = 0;
 };
 
-std::ostream& operator<<(std::ostream& out, const Document& document);
+//метод вывода документов
+std::ostream &operator<<(std::ostream &out, const Document &document);

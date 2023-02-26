@@ -5,12 +5,14 @@
 #include <vector>
 #include <set>
 
-std::vector<std::string> SplitIntoWords(const std::string& text);
+//метод разделяет слова по пробелам
+std::vector<std::string> SplitIntoWords(const std::string &text);
 
-template <typename StringContainer>
-std::set<std::string> MakeUniqueNonEmptyStrings(const StringContainer& strings) {
+//метод проверяет запрос на пустоту
+template<typename StringContainer>
+std::set<std::string> MakeUniqueNonEmptyStrings(const StringContainer &strings) {
     std::set<std::string> non_empty_strings;
-    for (const std::string& str : strings) {
+    for (const std::string &str: strings) {
         if (!str.empty()) {
             non_empty_strings.insert(str);
         }
@@ -18,10 +20,11 @@ std::set<std::string> MakeUniqueNonEmptyStrings(const StringContainer& strings) 
     return non_empty_strings;
 }
 
+//метод задает стоп слова
 template<typename TypeStop>
-std::set<std::string> SetStopWords(const TypeStop& stopwords) {
+std::set<std::string> SetStopWords(const TypeStop &stopwords) {
     std::set<std::string> stop_words;
-    for (const std::string& word : stopwords) {
+    for (const std::string &word: stopwords) {
         stop_words.insert(word);
     }
     return stop_words;

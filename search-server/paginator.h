@@ -1,17 +1,15 @@
 #pragma once
 
 #include <vector>
-#include <set>
-#include <map>
-#include <cmath>
+#include <iostream>
+#include "document.h"
 
-template <typename Iterator>
+//класс для работать с парами итераторов
+template<typename Iterator>
 class IteratorRange {
 public:
     IteratorRange(Iterator begin, Iterator end)
-            : first_(begin)
-            , last_(end)
-            , size_(distance(first_, last_)) {
+            : first_(begin), last_(end), size_(distance(first_, last_)) {
     }
 
     Iterator begin() const {
@@ -31,15 +29,16 @@ private:
     size_t size_;
 };
 
-template <typename Iterator>
-std::ostream& operator<<(std::ostream& out, const IteratorRange<Iterator>& range) {
+template<typename Iterator>
+std::ostream &operator<<(std::ostream &out, const IteratorRange<Iterator> &range) {
     for (Iterator it = range.begin(); it != range.end(); ++it) {
         out << *it;
     }
     return out;
 }
 
-template <typename Iterator>
+//класс позволяющий разбивать результаты на страницы
+template<typename Iterator>
 class Paginator {
 public:
     Paginator(Iterator begin, Iterator end, size_t page_size) {
@@ -69,7 +68,8 @@ public:
 
 };
 
-template <typename Container>
-auto Paginate(const Container& c, size_t page_size) {
+//метод для работы с конструктором Paginator
+template<typename Container>
+auto Paginate(const Container &c, size_t page_size) {
     return Paginator(begin(c), end(c), page_size);
 }
