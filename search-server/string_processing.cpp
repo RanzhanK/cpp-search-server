@@ -3,22 +3,16 @@
 using namespace std;
 
 //метод разделяет слова по пробелам
-std::vector<std::string> SplitIntoWords(const std::string &text) {
-    std::vector<std::string> words;
-    std::string word;
-    for (const char c: text) {
-        if (c == ' ') {
-            if (!word.empty()) {
-                words.push_back(word);
-                word.clear();
-            }
+vector <string_view> SplitIntoWords(string_view text) {
+    vector <string_view> result;
+    while (true) {
+        size_t space = text.find(' ');
+        result.push_back(text.substr(0, space));
+        if (space == text.npos) {
+            break;
         } else {
-            word += c;
+            text.remove_prefix(space + 1);
         }
     }
-    if (!word.empty()) {
-        words.push_back(word);
-    }
-
-    return words;
+    return result;
 }

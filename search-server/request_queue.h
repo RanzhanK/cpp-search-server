@@ -14,13 +14,13 @@ public:
 
     //метод добавления запроса с лямбдой, для сохранения статистики
     template<typename DocumentPredicate>
-    std::vector<Document> AddFindRequest(const std::string &raw_query, DocumentPredicate document_predicate);
+    std::vector <Document> AddFindRequest(const std::string &raw_query, DocumentPredicate document_predicate);
 
     //метод добавления запроса с заданным статусом, для сохранения статистики
-    std::vector<Document> AddFindRequest(const std::string &raw_query, DocumentStatus status);
+    std::vector <Document> AddFindRequest(const std::string &raw_query, DocumentStatus status);
 
     //метод добавления запроса с актуальным статусом, для сохранения статистики
-    std::vector<Document> AddFindRequest(const std::string &raw_query);
+    std::vector <Document> AddFindRequest(const std::string &raw_query);
 
     //метод для определения сколько за последние сутки было запросов, на которые ничего не нашлось
     int GetNoResultRequests() const;
@@ -31,7 +31,7 @@ private:
         int results;
     };
 
-    std::deque<QueryResult> requests_;
+    std::deque <QueryResult> requests_;
     const SearchServer &search_server_;
     int no_results_requests_;
     uint64_t current_time_;

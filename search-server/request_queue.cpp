@@ -4,21 +4,21 @@ using namespace std;
 
 //метод добавления запроса с лямбдой, для сохранения статистики
 template<typename DocumentPredicate>
-vector<Document> RequestQueue::AddFindRequest(const string &raw_query, DocumentPredicate document_predicate) {
+vector <Document> RequestQueue::AddFindRequest(const string &raw_query, DocumentPredicate document_predicate) {
     const auto result = search_server_.FindTopDocuments(raw_query, document_predicate);
     AddRequest(result.size());
     return result;
 }
 
 //метод добавления запроса с заданным статусом, для сохранения статистики
-vector<Document> RequestQueue::AddFindRequest(const string &raw_query, DocumentStatus status) {
+vector <Document> RequestQueue::AddFindRequest(const string &raw_query, DocumentStatus status) {
     const auto result = search_server_.FindTopDocuments(raw_query, status);
     AddRequest(result.size());
     return result;
 }
 
 //метод добавления запроса с актуальным статусом, для сохранения статистики
-vector<Document> RequestQueue::AddFindRequest(const string &raw_query) {
+vector <Document> RequestQueue::AddFindRequest(const string &raw_query) {
     const auto result = search_server_.FindTopDocuments(raw_query);
     AddRequest(result.size());
     return result;
@@ -29,6 +29,7 @@ int RequestQueue::GetNoResultRequests() const {
     return no_results_requests_;
 }
 
+//добавляем запрос
 void RequestQueue::AddRequest(int results_num) {
     ++current_time_;
     while (!requests_.empty() && min_in_day_ <= current_time_ - requests_.front().timestamp) {

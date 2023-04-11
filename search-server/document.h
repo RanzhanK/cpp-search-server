@@ -3,7 +3,7 @@
 #include <ostream>
 #include <iostream>
 
-//статусы документов
+//перечисляемые статусы документов
 enum class DocumentStatus {
     ACTUAL,
     IRRELEVANT,

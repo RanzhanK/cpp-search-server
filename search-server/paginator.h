@@ -64,7 +64,7 @@ public:
         return pages_.size();
     }
 
-    std::vector<IteratorRange<Iterator>> pages_;
+    std::vector <IteratorRange<Iterator>> pages_;
 
 };
 
